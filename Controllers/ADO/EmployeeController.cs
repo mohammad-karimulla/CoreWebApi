@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using WebAPI.Models;
+using WebAPI.Models.ADO;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.ADO
 {
-    [Route("api/[controller]")]
+    [Route("api/ado/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
+        private readonly IFileOperations _fileOperations;
 
-        public EmployeeController(IConfiguration configuration, IWebHostEnvironment env)
+        public EmployeeController(IConfiguration configuration, IWebHostEnvironment env, IFileOperations fileOperations)
         {
             _configuration = configuration;
             _env = env;
+            _fileOperations = fileOperations;
         }
 
         [HttpGet]
@@ -30,6 +31,7 @@ namespace WebAPI.Controllers
                     CONVERT(varchar(10), DateOfJoining, 120) as DateOfJoining,
                     PhotoFileName
                     FROM dbo.Employee
+                    ORDER BY EmployeeID
                     ";
             string sqlDataSource = _configuration.GetConnectionString("OrganizationAppCon");
 
@@ -107,7 +109,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{employeeID}")]
-        public JsonResult DeleteDepartment(int employeeID)
+        public JsonResult DeleteEmployee(int employeeID)
         {
             string query = @"
                     DELETE FROM dbo.Employee
@@ -132,24 +134,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public JsonResult SaveFile()
         {
-            try
-            {
-                var httpRequest = Request.Form;
-                var postedFile = httpRequest.Files[0];
-                string fileName = postedFile.FileName;
-                var physicalPath = _env.ContentRootPath + "/Photos/" + fileName;
-
-                using(var stream = new FileStream(physicalPath, FileMode.Create))
-                {
-                    postedFile.CopyTo(stream);
-                }
-
-                return new JsonResult(fileName);
-            }
-            catch (Exception)
-            {
-                return new JsonResult("anonymous.png");
-            }
+            return new JsonResult(_fileOperations.SaveImage(_env, Request));
         }
     }
 }

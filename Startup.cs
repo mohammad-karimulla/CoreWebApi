@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using System.IO;
+using WebAPI.Models;
+using WebAPI.Models.CodeFirst;
+using WebAPI.Models.DataFirst;
 
 namespace WebAPI
 {
@@ -27,7 +31,7 @@ namespace WebAPI
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
-            //JSON Serializer
+            // JSON Serializer
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options => 
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
@@ -35,7 +39,18 @@ namespace WebAPI
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver()
             );
 
+            // DI into Controllers
+            services.AddSingleton<IFileOperations, FileOperations>();
+
             services.AddControllers();
+         
+            // Connection to 'OrgCodeFirst' Database
+            services.AddDbContext<OrgCodeFirstContext>(options => 
+                    options.UseSqlServer(Configuration.GetConnectionString("OrganizationAppCodeFirstCon")));
+
+            // Connection to 'OrgDataFirst' Database
+            services.AddDbContext<OrgDataFirstContext>(options => 
+                    options.UseSqlServer(Configuration.GetConnectionString("OrganizationAppDataFirstCon")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

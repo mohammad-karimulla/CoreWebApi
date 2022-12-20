@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.Models;
+using WebAPI.Models.ADO;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.ADO
 {
-    [Route("api/[controller]")]
+    [Route("api/ado/[controller]")]
     [ApiController]
     public class DepartmentController : ControllerBase
     {
