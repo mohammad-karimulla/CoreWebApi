@@ -1,3 +1,5 @@
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +44,10 @@ namespace WebAPI
             // DI into Controllers
             services.AddSingleton<IFileOperations, FileOperations>();
 
+            // AWS services
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
+            
             services.AddControllers();
          
             // Connection to 'OrgCodeFirst' Database
