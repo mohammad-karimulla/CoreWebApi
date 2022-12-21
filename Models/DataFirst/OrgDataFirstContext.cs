@@ -32,7 +32,7 @@ namespace WebAPI.Models.DataFirst
                     .HasName("PK_DepName")
                     .IsUnique();
 
-                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+                entity.Property(e => e.DepartmentID).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.DepartmentName)
                     .IsRequired()
@@ -42,7 +42,7 @@ namespace WebAPI.Models.DataFirst
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+                entity.Property(e => e.EmployeeID).HasColumnName("EmployeeID");
 
                 entity.Property(e => e.DateOfJoining).HasColumnType("date");
 
