@@ -7,11 +7,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.IO;
 using WebAPI.Models;
 using WebAPI.Models.CodeFirst;
 using WebAPI.Models.DataFirst;
+using WebAPI.Repository;
 
 namespace WebAPI
 {
@@ -41,6 +43,12 @@ namespace WebAPI
                     options.SerializerSettings.ContractResolver = new DefaultContractResolver()
             );
 
+            // Swagger for API
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
+            });
+
             // DI into Controllers
             services.AddSingleton<IFileOperations, FileOperations>();
 
@@ -48,6 +56,7 @@ namespace WebAPI
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
             
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddControllers();
          
             // Connection to 'OrgCodeFirst' Database

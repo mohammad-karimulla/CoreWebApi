@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
 
             await _s3Client.PutObjectAsync(request);
             
-            return Ok($"File '{prefix}/{file.FileName}' uploaded to S3 successfully!");
+            return new JsonResult($"File '{prefix}/{file.FileName}' uploaded to S3 successfully!");
         }
 
         [HttpGet("get-all")]
@@ -97,7 +97,7 @@ namespace WebAPI.Controllers
 
             await _s3Client.DeleteObjectAsync(bucketName, key);
 
-            return Ok($"File '{key}' deleted from S3 successfully!");
+            return new JsonResult($"File '{key}' deleted from S3 successfully!");
         }
     }
 }

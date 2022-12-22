@@ -28,12 +28,12 @@ namespace WebAPI.Controllers
             PutBucketRequest putBucketRequest = new PutBucketRequest()
             {
                 BucketName = bucketName,
-                BucketRegion = S3Region.APSouth1
+                BucketRegion = S3Region.EUWest2
             };
 
             await _s3Client.PutBucketAsync(putBucketRequest);
 
-            return Ok($"Bucket '{bucketName}' created successfully!");
+            return new JsonResult($"Bucket '{bucketName}' created successfully!");
         }
 
         [HttpGet("get-all")]
@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
 
             await _s3Client.DeleteBucketAsync(bucketName);
 
-            return Ok($"Bucket '{bucketName}' deleted successfully!");
+            return new JsonResult($"Bucket '{bucketName}' deleted successfully!");
         }
     }
 }

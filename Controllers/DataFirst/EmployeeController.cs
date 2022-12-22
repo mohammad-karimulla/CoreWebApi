@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models;
 using WebAPI.Models.DataFirst;
+using WebAPI.Models.Pagination;
+using WebAPI.Repository;
 
 namespace WebAPI.Controllers.DataFirst
 {
@@ -15,18 +17,26 @@ namespace WebAPI.Controllers.DataFirst
         private readonly OrgDataFirstContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly IFileOperations _fileOperations;
+        private IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(OrgDataFirstContext context, IWebHostEnvironment env, IFileOperations fileOperations)
+        public EmployeeController(IEmployeeRepository employeeRepository, OrgDataFirstContext context, IWebHostEnvironment env, IFileOperations fileOperations)
         {
+            _employeeRepository = employeeRepository;
             _context = context;
             _env = env;
             _fileOperations = fileOperations;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees([FromQuery] PagingParameters pagingParameters)
         {
-            return await _context.Employees.ToListAsync();
+            return await _employeeRepository.GetEmployees(pagingParameters);
+        }
+        
+        [HttpGet("get-all-count")]
+        public async Task<ActionResult<int>> GetEmployeesCount()
+        {
+            return await _employeeRepository.GetEmployeesCount();
         }
 
         [HttpGet("{id}")]
