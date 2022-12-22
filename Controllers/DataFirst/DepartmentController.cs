@@ -21,7 +21,7 @@ namespace WebAPI.Controllers.DataFirst
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
         {
-            return await _context.Departments.ToListAsync();
+            return await _context.Departments.OrderBy(d => d.DepartmentID).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -82,7 +82,7 @@ namespace WebAPI.Controllers.DataFirst
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetAllDepartmentNames()
         {
-            return await _context.Departments.Select(d => new { d.DepartmentName }).ToListAsync();
+            return await _context.Departments.Select(d => new { d.DepartmentName }).OrderBy(d => d.DepartmentName).ToListAsync();
         }
     }
 }
