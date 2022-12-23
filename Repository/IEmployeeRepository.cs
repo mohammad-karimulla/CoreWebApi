@@ -7,6 +7,7 @@ namespace WebAPI.Repository
     public interface IEmployeeRepository : IRepositoryBase<Employee>
     {
         Task<PagedList<Employee>> GetEmployees(PagingParameters pagingParameters);
+
         Task<int> GetEmployeesCount();
     }
 }

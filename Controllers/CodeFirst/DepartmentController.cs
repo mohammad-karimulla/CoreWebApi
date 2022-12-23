@@ -46,7 +46,7 @@ namespace WebAPI.Controllers.CodeFirst
             {
                 await _context.SaveChangesAsync();
 
-                return new JsonResult("Updated Successfully");
+                return new JsonResult("CodeFirst: Updated Successfully");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers.CodeFirst
             _context.Departments.Add(department);
             await _context.SaveChangesAsync();
 
-            return new JsonResult("Added Successfully");
+            return new JsonResult("CodeFirst: Added Successfully");
         }
 
         [HttpDelete("{id}")]
@@ -75,7 +75,7 @@ namespace WebAPI.Controllers.CodeFirst
             _context.Departments.Remove(department);
             await _context.SaveChangesAsync();
 
-            return new JsonResult("Deleted Successfully");
+            return new JsonResult("CodeFirst: Deleted Successfully");
         }
 
         [Route("GetAllDepartmentNames")]

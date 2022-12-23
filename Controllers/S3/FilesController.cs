@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.S3
 {
     [Route("api/[controller]")]
     [ApiController]

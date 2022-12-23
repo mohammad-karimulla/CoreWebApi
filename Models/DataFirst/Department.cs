@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace WebAPI.Models.DataFirst
 {
@@ -10,7 +9,6 @@ namespace WebAPI.Models.DataFirst
             Employees = new HashSet<Employee>();
         }
 
-        [Key]
         public int DepartmentID { get; set; }
 
         public string DepartmentName { get; set; }

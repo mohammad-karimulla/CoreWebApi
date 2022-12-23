@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.S3
 {
     [Route("api/[controller]")]
     [ApiController]

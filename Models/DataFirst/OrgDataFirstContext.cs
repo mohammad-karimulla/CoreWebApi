@@ -16,23 +16,15 @@ namespace WebAPI.Models.DataFirst
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Name=OrganizationAppDataFirstCon");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Department>(entity =>
             {
                 entity.HasIndex(e => e.DepartmentName)
-                    .HasName("PK_DepName")
+                    .HasName("UQ__Departme__D949CC34596374E6")
                     .IsUnique();
 
-                entity.Property(e => e.DepartmentID).HasColumnName("DepartmentID");
+                entity.Property(e => e.DepartmentID);
 
                 entity.Property(e => e.DepartmentName)
                     .IsRequired()
@@ -42,13 +34,9 @@ namespace WebAPI.Models.DataFirst
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.Property(e => e.EmployeeID).HasColumnName("EmployeeID");
+                entity.Property(e => e.EmployeeID);
 
                 entity.Property(e => e.DateOfJoining).HasColumnType("date");
-
-                entity.Property(e => e.Department)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.EmployeeName)
                     .HasMaxLength(500)
@@ -60,9 +48,9 @@ namespace WebAPI.Models.DataFirst
 
                 entity.HasOne(d => d.DepartmentNavigation)
                     .WithMany(p => p.Employees)
-                    .HasPrincipalKey(p => p.DepartmentName)
                     .HasForeignKey(d => d.Department)
-                    .HasConstraintName("FK_Employees_Departments");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Employees__Depar__4222D4EF");
             });
 
             OnModelCreatingPartial(modelBuilder);

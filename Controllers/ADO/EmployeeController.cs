@@ -79,7 +79,7 @@ namespace WebAPI.Controllers.ADO
                 }
             }
 
-            return new JsonResult("Added Successfully");
+            return new JsonResult("ADO: Added Successfully");
         }
 
         [HttpPut]
@@ -105,7 +105,7 @@ namespace WebAPI.Controllers.ADO
                 }
             }
 
-            return new JsonResult("Updated Successfully");
+            return new JsonResult("ADO: Updated Successfully");
         }
 
         [HttpDelete("{employeeID}")]

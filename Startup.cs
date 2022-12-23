@@ -1,4 +1,3 @@
-using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +31,12 @@ namespace WebAPI
             // Enable CORS
             services.AddCors(c =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+                c.AddPolicy("AllowAngularAppUrl", options =>
+                    // options.AllowAnyOrigin()
+                    options.WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials());
             });
 
             // JSON Serializer
@@ -55,16 +59,19 @@ namespace WebAPI
             // AWS services
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
             services.AddAWSService<IAmazonS3>();
-            
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddControllers();
-         
+
+            // SignalR
+            services.AddSignalR();
+
             // Connection to 'OrgCodeFirst' Database
             services.AddDbContext<OrgCodeFirstContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("OrganizationAppCodeFirstCon")));
 
             // Connection to 'OrgDataFirst' Database
-            services.AddDbContext<OrgDataFirstContext>(options => 
+            services.AddDbContext<OrgDataFirstContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("OrganizationAppDataFirstCon")));
         }
 
@@ -72,7 +79,7 @@ namespace WebAPI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Adds a CORS middleware to allow cross domain requests
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors("AllowAngularAppUrl");
 
             if (env.IsDevelopment())
             {
@@ -86,6 +93,7 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<SNSHub>("/snsHub");
             });
 
             // To enable static files serving for the current request path
