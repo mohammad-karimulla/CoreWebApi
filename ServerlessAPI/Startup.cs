@@ -27,8 +27,8 @@ namespace ServerlessAPI
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowAngularAppUrl", options =>
-                    options.WithOrigins("http://localhost:4200", 
-                                        "http://deployangulars3bucket.s3-website.eu-west-2.amazonaws.com/")
+                    options.WithOrigins("http://localhost:4200",
+                                        "http://deployangulars3bucket.s3-website.eu-west-2.amazonaws.com")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials()

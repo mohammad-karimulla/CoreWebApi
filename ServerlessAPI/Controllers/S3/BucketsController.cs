@@ -61,26 +61,7 @@ namespace ServerlessAPI.Controllers.S3
                 var data = await _s3Client.ListBucketsAsync();
 
                 var buckets = data.Buckets
-                    .Where(b => !_skippedBuckets.Any(x => x.StartsWith(b.BucketName)))
-                    .Select(b => { return b.BucketName; });
-
-                return Ok(buckets);
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult($"Exception: {ex.Message}");
-            }
-        }
-
-        [HttpGet("getall")]
-        public async Task<IActionResult> GetAllBucket()
-        {
-            try
-            {
-                var data = await _s3Client.ListBucketsAsync();
-
-                var buckets = data.Buckets
-                    .Where(b => !_skippedBuckets.Any(x => x.StartsWith(b.BucketName)))
+                    .Where(b => !_skippedBuckets.Any(x => b.BucketName.StartsWith(x)))
                     .Select(b => { return b.BucketName; });
 
                 return Ok(buckets);
