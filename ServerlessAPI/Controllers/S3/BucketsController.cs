@@ -77,9 +77,7 @@ namespace ServerlessAPI.Controllers.S3
         {
             try
             {
-                IAmazonS3 client = new AmazonS3Client("AKIAWGLWBD3WJRV4AKS2", "pFEaJfnInL6GIPnueoTb2Z5n/cQXO/aMUK/h/niF", RegionEndpoint.EUWest2);
-
-                var data = await client.ListBucketsAsync();
+                var data = await _s3Client.ListBucketsAsync();
 
                 var buckets = data.Buckets
                     .Where(b => !_skippedBuckets.Any(x => x.StartsWith(b.BucketName)))
